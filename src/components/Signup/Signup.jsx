@@ -1,28 +1,56 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { signup } from "../../redux/authActions";
+import { signupSuccess, signupFailure } from "../../redux/authActions";
+// eslint-disable-next-line
+import bcrypt from "bcryptjs";
+import { Bounce, toast } from "react-toastify";
 
 const Signup = () => {
   const dispatch = useDispatch();
+
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(signup(formData, navigate));
+    if (formData != null) {
+      const hashedPassword = bcrypt.hashSync(formData.password, 5);
+      formData.password = hashedPassword;
+      dispatch(signupSuccess(formData));
+      localStorage.setItem(
+        "authState",
+        JSON.stringify({ isAuthenticated: true, user: formData })
+      );
+      navigate("/");
+      toast.success("Registration Successful !", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
+    } else {
+      dispatch(signupFailure());
+    }
     setFormData({
       name: "",
       email: "",
       password: "",
     });
   };
+
   return (
     <div>
       <section
