@@ -1,7 +1,32 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../../redux/authActions";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    dispatch(login(formData, navigate));
+
+    setFormData({
+      email: "",
+      password: "",
+    });
+  };
+
   return (
     <div style={{ height: "100vh" }}>
       <section
@@ -29,18 +54,6 @@ const Login = () => {
                     We write words, take photos, make videos, and interact with
                     artificial intelligence.
                   </p>
-                  <div className="text-endx">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="48"
-                      height="48"
-                      fill="currentColor"
-                      className="bi bi-grip-horizontal"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M2 8a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                    </svg>
-                  </div>
                 </div>
               </div>
             </div>
@@ -60,7 +73,7 @@ const Login = () => {
                       </div>
                     </div>
                   </div>
-                  <form action="#!">
+                  <form onSubmit={handleSubmit}>
                     <div className="row gy-3 overflow-hidden">
                       <div className="col-12">
                         <div className="form-floating mb-2">
@@ -68,6 +81,8 @@ const Login = () => {
                             type="email"
                             className="form-control"
                             name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
                             id="email"
                             placeholder="name@example.com"
                             required
@@ -83,8 +98,11 @@ const Login = () => {
                             type="password"
                             className="form-control"
                             name="password"
+                            value={formData.password}
+                            onChange={handleInputChange}
                             id="password"
                             placeholder="Password"
+                            autoComplete="on"
                             required
                           />
                           <label htmlFor="password" className="form-label">
