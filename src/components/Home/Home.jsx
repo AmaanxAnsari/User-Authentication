@@ -1,21 +1,14 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess, logout } from "../../redux/authActions";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/authActions";
 import { useNavigate } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.auth.user);
 
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("authState"));
-    console.log("🚀 ~ useEffect ~ storedUser:", storedUser.user.name);
-    if (storedUser) {
-      dispatch(loginSuccess(storedUser.user.name));
-    }
-  }, [dispatch]);
+  const storedUser = JSON.parse(localStorage.getItem("authState"));
 
   const handleLogout = () => {
     dispatch(logout());
@@ -32,7 +25,7 @@ const Home = () => {
   };
   return (
     <div>
-      <h1>Hi {user.name} Welcome to AccuKnox</h1>
+      <h1>Hi {storedUser.user.name} Welcome to AccuKnox</h1>
       <button type="submit" onClick={handleLogout}>
         Logout
       </button>
