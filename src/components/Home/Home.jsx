@@ -15,7 +15,7 @@ const Home = () => {
     navigate("/");
     toast.success("Logout Successful !", {
       position: "top-center",
-      autoClose: 3000,
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       progress: undefined,
@@ -25,10 +25,31 @@ const Home = () => {
   };
   return (
     <div>
-      <h1>Hi {storedUser.user.name} Welcome to AccuKnox</h1>
-      <button type="submit" onClick={handleLogout}>
-        Logout
-      </button>
+      <section
+        className="desktop-only d-flex align-items-center justify-content-center"
+        style={{ padding: "2rem", backgroundColor: "var(--background-blue)" }}
+      >
+        <div style={{ color: "var(--white)" }}>
+          <div className="d-flex ">
+            <h1 className="display-3 text-center ">
+              Hi {storedUser.user.name} welcome to
+              <span>
+                <img src="logo-white.png" alt="AccuKnox" className="h-75" />
+              </span>
+            </h1>
+          </div>
+
+          <div className="d-flex justify-content-center">
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg"
+              onClick={handleLogout}
+            >
+              Logout !
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

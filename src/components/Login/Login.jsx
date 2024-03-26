@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import bcrypt from "bcryptjs";
 import { loginFailure, loginSuccess } from "../../redux/authActions";
 import { toast, Bounce } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -13,9 +14,13 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+
+  const [setPassword, setShowPassword] = useState(false);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError("");
   };
 
   const handleSubmit = async (e) => {
@@ -23,55 +28,53 @@ const Login = () => {
 
     const authState = JSON.parse(localStorage.getItem("authState"));
 
+    if (!authState || !authState.user) {
+      setError("No user found, please sign up first.");
+      return;
+    }
+
+    if (authState.user.email !== formData.email) {
+      setError("Email address is not registered !");
+      return;
+    }
+
     const passwordCheck = bcrypt.compareSync(
       formData.password,
       authState.user.password
     );
 
-    if (authState.user.email === formData.email && passwordCheck === true) {
+    if (passwordCheck) {
       dispatch(loginSuccess(authState.user));
       navigate("/home");
       toast.success("Login Successful !", {
         position: "top-center",
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
         transition: Bounce,
       });
-    } else if (
-      authState.user.email === formData.email &&
-      passwordCheck === false
-    ) {
-      console.log("Invalid Password");
-      dispatch(loginFailure());
-    } else if (
-      authState.user.email !== formData.email &&
-      passwordCheck === true
-    ) {
-      console.log("Invalid Email");
-      dispatch(loginFailure());
     } else {
-      console.log("Invalid Credentials");
+      setError("Incorrect password.");
+      setFormData({ ...formData, password: "" });
+      dispatch(loginFailure());
     }
-
-    setFormData({
-      email: "",
-      password: "",
-    });
   };
 
   return (
-    <div style={{ height: "100vh" }}>
+    <div>
       <section
-        className="bg-primary d-flex align-items-center"
-        style={{ height: "100vh" }}
+        className="desktop-only d-flex align-items-center"
+        style={{ padding: "2rem", backgroundColor: "var(--background-blue)" }}
       >
         <div className="container">
-          <div className="row gy-4 align-items-center">
+          <div
+            className="row gy-4 align-items-center"
+            style={{ color: "var(--white)" }}
+          >
             <div className="col-12 col-md-6 col-xl-7">
-              <div className="d-flex justify-content-center text-bg-primary">
+              <div className="d-flex justify-content-center">
                 <div className="col-12 col-xl-9">
                   <img
                     className="img-fluid rounded mb-2"
@@ -128,10 +131,10 @@ const Login = () => {
                         </div>
                       </div>
                       <div className="col-12">
-                        <div className="form-floating mb-2">
+                        <div className="input-group form-floating mb-2">
                           <input
-                            type="password"
-                            className="form-control"
+                            type={setPassword ? "text" : "password"}
+                            className="form-control border-end-0"
                             name="password"
                             value={formData.password}
                             onChange={handleInputChange}
@@ -140,9 +143,18 @@ const Login = () => {
                             autoComplete="on"
                             required
                           />
+
                           <label htmlFor="password" className="form-label">
                             Password
                           </label>
+                          <span
+                            className="input-group-text bg-white"
+                            onClick={() => {
+                              setShowPassword(!setPassword);
+                            }}
+                          >
+                            <i>{setPassword ? <FaEyeSlash /> : <FaEye />}</i>
+                          </span>
                         </div>
                       </div>
 
@@ -157,6 +169,15 @@ const Login = () => {
                         </div>
                       </div>
                     </div>
+                    {error && (
+                      <div className="row">
+                        <div className="col-12">
+                          <div className="alert alert-danger mt-3" role="alert">
+                            {error}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </form>
                 </div>
               </div>

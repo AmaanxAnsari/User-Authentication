@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { signupSuccess, signupFailure } from "../../redux/authActions";
-// eslint-disable-next-line
 import bcrypt from "bcryptjs";
 import { Bounce, toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Signup = () => {
   const dispatch = useDispatch();
@@ -17,13 +17,50 @@ const Signup = () => {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [errors, setErrors] = useState({});
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+      isValid = false;
+    } else if (!/^[a-zA-Z ]+$/.test(formData.name)) {
+      newErrors.name = "Name must contain only letters";
+      isValid = false;
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email is invalid";
+      isValid = false;
+    }
+
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required";
+      isValid = false;
+    } else if (!/^[a-zA-Z0-9!@#$%^&*]{6,}$/.test(formData.password)) {
+      newErrors.password =
+        "Password must be at least 6 characters long and contain only letters, numbers, or special characters: !@#$%^&*";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formData != null) {
+    if (validateForm()) {
       const hashedPassword = bcrypt.hashSync(formData.password, 5);
       formData.password = hashedPassword;
       dispatch(signupSuccess(formData));
@@ -34,33 +71,36 @@ const Signup = () => {
       navigate("/");
       toast.success("Registration Successful !", {
         position: "top-center",
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
         transition: Bounce,
+      });
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
       });
     } else {
       dispatch(signupFailure());
     }
-    setFormData({
-      name: "",
-      email: "",
-      password: "",
-    });
   };
 
   return (
     <div>
       <section
-        className="bg-primary d-flex align-items-center"
-        style={{ height: "100vh" }}
+        className="desktop-only d-flex align-items-center"
+        style={{ padding: "2rem", backgroundColor: "var(--background-blue)" }}
       >
         <div className="container">
           <div className="row gy-4 align-items-center">
             <div className="col-12 col-md-6 col-xl-7">
-              <div className="d-flex justify-content-center text-bg-primary">
+              <div
+                className="d-flex justify-content-center "
+                style={{ color: "var(--white)" }}
+              >
                 <div className="col-12 col-xl-9">
                   <img
                     className="img-fluid rounded mb-2"
@@ -103,7 +143,9 @@ const Signup = () => {
                         <div className="form-floating mb-2">
                           <input
                             type="text"
-                            className="form-control"
+                            className={`form-control ${
+                              errors.name ? "is-invalid" : ""
+                            }`}
                             name="name"
                             value={formData.name}
                             id="name"
@@ -114,13 +156,20 @@ const Signup = () => {
                           <label htmlFor="name" className="form-label">
                             Name
                           </label>
+                          {errors.name && (
+                            <div className="invalid-feedback">
+                              {errors.name}
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="col-12">
                         <div className="form-floating mb-2">
                           <input
                             type="email"
-                            className="form-control"
+                            className={`form-control ${
+                              errors.email ? "is-invalid" : ""
+                            }`}
                             value={formData.email}
                             name="email"
                             id="email"
@@ -131,13 +180,20 @@ const Signup = () => {
                           <label htmlFor="email" className="form-label">
                             Email
                           </label>
+                          {errors.email && (
+                            <div className="invalid-feedback">
+                              {errors.email}
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="col-12">
-                        <div className="form-floating mb-2">
+                        <div className="input-group form-floating mb-2">
                           <input
-                            type="password"
-                            className="form-control"
+                            type={showPassword ? "text" : "password"}
+                            className={`form-control border-end-0 ${
+                              errors.password ? "is-invalid" : ""
+                            }`}
                             value={formData.password}
                             name="password"
                             id="password"
@@ -146,9 +202,24 @@ const Signup = () => {
                             autoComplete="on"
                             required
                           />
+
                           <label htmlFor="password" className="form-label">
                             Password
                           </label>
+                          <span
+                            className="input-group-text bg-white"
+                            onClick={() => {
+                              setShowPassword(!showPassword);
+                            }}
+                          >
+                            <i>{showPassword ? <FaEyeSlash /> : <FaEye />}</i>
+                          </span>
+
+                          {errors.password && (
+                            <div className="invalid-feedback">
+                              {errors.password}
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="col-12">
