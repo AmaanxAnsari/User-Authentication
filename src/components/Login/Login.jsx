@@ -85,12 +85,13 @@ const Login = () => {
                     alt="BootstrapBrain Logo"
                   />
                   <hr className="border-primary-subtle mb-4" />
-                  <h2 className="h1 mb-4">
-                    We make digital products that drive you to stand out.
+                  <h2 className="mb-4">
+                    Zero Trust Cloud Native Application Protection Platform.
                   </h2>
                   <p className="lead mb-5">
-                    We write words, take photos, make videos, and interact with
-                    artificial intelligence.
+                    We provide an Agentless approach to deliver Cloud Security;
+                    the most open and powerful, eBPF [Extended Berkeley Packet
+                    Filter] to deliver advanced run-time security.
                   </p>
                 </div>
               </div>

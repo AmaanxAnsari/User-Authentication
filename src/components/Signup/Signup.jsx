@@ -111,12 +111,15 @@ const Signup = () => {
                     alt="BootstrapBrain Logo"
                   />
                   <hr className="border-primary-subtle mb-4" />
-                  <h2 className="h1 mb-4">
-                    We make digital products that drive you to stand out.
+                  <h2 className="mb-4">
+                    Zero Trust Cloud Native Application Protection Platform
                   </h2>
                   <p className="lead mb-5">
-                    We write words, take photos, make videos, and interact with
-                    artificial intelligence.
+                    AccuKnox provides one of the industry’s most comprehensive
+                    and integrated CNAPP solutions which brings together
+                    multiple disparate security modules such as AppSec, Cloud
+                    security, and Runtime security capabilities [CSPM, ASPM,
+                    CIEM, CWPP, KIEM] into a single platform.
                   </p>
                 </div>
               </div>
