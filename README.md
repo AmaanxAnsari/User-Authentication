@@ -77,7 +77,9 @@ fallback: {
 ![Signup Page](screenshots/SignupPage.jpg)
 
 - Users can sign up with a unique username and password.
-  ![Signup Validation](screenshots/Signupvalidation.jpg)
+
+![Signup Validation](screenshots/Signupvalidation.jpg)
+
 - Users can sign up with a unique username which contains only alphabets.
 - Users can sign up with a unique email.
 - Users can sign up with a unique password which is atleast 6 character long and consists upercase and lowercase alphabets along with numbers and symbols.
@@ -94,18 +96,30 @@ fallback: {
 ![Login Page](screenshots/Loginpage.jpg)
 
 - Registered users can log in with their credentials.
-  ![Login Validation](screenshots/LoginValidation.jpg)
+
+![Login Validation](screenshots/LoginValidation.jpg)
+
 - Users must sign up before they can access the login page. Once signed up, they can log in with their credentials.
-  ![Login Page](screenshots/LoginEmailValidation.jpg)
+
+![Login Page](screenshots/LoginEmailValidation.jpg)
+
 - Email validation is performed on the login page to ensure the entered email format is correct before proceeding with authentication.
 - Additionally, the application checks whether the entered email is registered in the system before proceeding with authentication.
-  ![Login Page](screenshots/LoginPasswordValidation.jpg)
+
+![Login Page](screenshots/LoginPasswordValidation.jpg)
+
 - Password validation is enforced to ensure it matches the password in localstorage.
-  ![Login Page](screenshots/LoginSuccess-HomePage.jpg)
+
+![Login Page](screenshots/LoginSuccess-HomePage.jpg)
+
 - After successful authentication, users are redirected to the authenticated section where they can see a welcome message and a logout button.
-  ![Logout](screenshots/LogoutSuccess.jpg)
+
+![Logout](screenshots/LogoutSuccess.jpg)
+
 - Upon clicking the logout button, users are successfully logged out from the application and redirected to the login page.
-  ![Login Page](screenshots/ClearedLocalStorage.jpg)
+
+![Login Page](screenshots/ClearedLocalStorage.jpg)
+
 - Additionally, local storage is cleared to remove any stored user authentication details.
 
 ## Authors
